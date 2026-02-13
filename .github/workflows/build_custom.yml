@@ -1,0 +1,31 @@
+name: Build Custom Tasmota (ESP8266)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install PlatformIO
+        run: |
+          python -m pip install --upgrade pip
+          pip install platformio
+
+      - name: Build tasmota (ESP8266)
+        run: |
+          platformio run -e tasmota
+
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-tasmota-esp8266
+          path: .pio/build/tasmota/firmware.bin
