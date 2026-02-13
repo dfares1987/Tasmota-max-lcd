@@ -1,0 +1,23 @@
+name: Build Custom Tasmota
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Build firmware
+        run: pio run -e tasmota
+
+      - name: Upload firmware
+        uses: actions/upload-artifact@v3
+        with:
+          name: firmware
+          path: .pio/build/tasmota/firmware.bin
